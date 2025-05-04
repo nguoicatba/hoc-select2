@@ -64,30 +64,49 @@ namespace test_select2.Controllers
         }
 
 
-        public JsonResult GetData2(string q, int page = 1)
+        public JsonResult GetData2(string q="", int page = 1)
         {
             int pageSize = 10; // Number of items per page
             var data = new List<Select2Item>
                {
                         
-                            new Select2Item { id = 13, text = "kin2" },
+                            new Select2Item { id = 13, text = "kin2"},
                             new Select2Item { id = 14, text = "kin3" },
                             new Select2Item { id = 15, text = "kin4" },
                             new Select2Item { id = 16, text = "kin5" },
+                            new Select2Item { id = 17, text = "kin6" },
+                            new Select2Item { id = 18, text = "kin7" },
+                            new Select2Item { id = 19, text = "kin8" },
+                            new Select2Item { id = 20, text = "kin9" },
+                            new Select2Item { id = 21, text = "kin10" },
+                            new Select2Item { id = 22, text = "kin11" },
+                            new Select2Item { id = 23, text = "kin12" },
+                            new Select2Item { id = 24, text = "kin13" },
+                            new Select2Item { id = 25, text = "kin14" },
+                            new Select2Item { id = 26, text = "kin15" },
+                            new Select2Item { id = 27, text = "kin16" },
+                            new Select2Item { id = 28, text = "kin17" },
+
 
 
                };
-            var query = data.Where(data => data.text.ToLower().Contains(q.ToLower()));
+            
+            var query = q == ""? data : data.Where(data => data.text.ToLower().Contains(q.ToLower()));
             var totalCount = query.Count();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
             var paginatedData = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
+            List<Select2Item> data2 = new List<Select2Item>();
+            if (page ==1) data2.Add(new Select2Item { id = -1, text = "-1", disabled = true });
+            data2.AddRange(paginatedData);
 
 
 
             return Json(new
             {
-                items = paginatedData,
-                total_count = totalCount
+                items = data2,
+                total_count = totalCount,
+                header_code="Code",
+                header_name = "Name Kien",
             });
         }
     }

@@ -4,7 +4,16 @@
 
 
 
-<select class="js-example-basic-multiple" style="width: 500px;" data-url="@Url.Action("GetData", "Home")">
+<select class="js-test-select" style="width: 500px;">
+    <option value="AL" disabled="disabled">Alabama</option>
+    <option value="WY">Wyoming</option>
+    <option value="CA">California</option>
+    <option value="NY">New York</option>
+    <option value="TX">Texas</option>
+    <option value="FL">Florida</option>
+    <option value="IL">Illinois</option>
+    <option value="PA">Pennsylvania</option>
+    <option value="OH">Ohio</option>
   
 </select>
 
@@ -19,15 +28,28 @@
     <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
     <script>
         
-
+        let Headers="";
+        let Headers2="";
         function formatState2 (state) {
+
             if (!state.id) {
                 return state.text;
             }
+
+            if (state.id == '-1'){
+                var $state = $(
+                      '<div class="row px-2 py-1" style="background-color:#d1e7dd; color:#0f5132; font-weight:bold; border-radius:4px;">' +
+                       '<div class="col-4">'+Headers+'</div>' +
+                     '<div class="col-8">'+Headers2+'</div>' +
+                     '</div>'
+                );
+                return $state;
+            }
+
             var $state = $(
-                 '<div class="row">'+
-                    '<div class="col-6">'+state.id+'</div>'+
-                    '<div class="col-6">'+state.text+'</div>'+
+                 '<div class="row px-2 py-1">'+
+                    '<div class="col-4">'+state.id+'</div>'+
+                    '<div class="col-8">'+state.text+'</div>'+
                  '</div>'
                      
                 
@@ -57,14 +79,17 @@
                 ajax: {
                     url: url,
                     dataType: 'json',
+
                     data: function (params) {
                         return {
-                            q: params.term,
+                            q: params.term || '',
                             page: params.page
                         };
                     },
                     processResults: function (data, params) {
                         params.page = params.page || 1;
+                        Headers = data.header_code;
+                        Headers2 = data.header_name;
 
                         return {
                             results: data.items,
@@ -75,10 +100,11 @@
                     },
                     cache: true
                 },
-                minimumInputLength: 1,
+                minimumInputLength: 0,
                 templateResult: formatState2,
                 templateSelection: formatState,
-                tags: true,
+           
+               
                 placeholder: 'Select an option Code - Name',
                 allowClear: true
             });
