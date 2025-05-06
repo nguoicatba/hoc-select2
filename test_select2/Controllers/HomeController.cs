@@ -1,4 +1,4 @@
-using System.Diagnostics;
+﻿using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
 using test_select2.Models;
 
@@ -29,7 +29,7 @@ namespace test_select2.Controllers
             return View(new ErrorViewModel { RequestId = Activity.Current?.Id ?? HttpContext.TraceIdentifier });
         }
 
-        public JsonResult GetData(string q,int page=1)
+        public JsonResult GetData(string q, int page = 1)
         {
             int pageSize = 10; // Number of items per page
             var data = new List<Select2Item>
@@ -49,7 +49,7 @@ namespace test_select2.Controllers
                         new Select2Item { id = 13, text = "kin2" },
 
                };
-            var query=data.Where(data => data.text.ToLower().Contains(q.ToLower()));
+            var query = data.Where(data => data.text.ToLower().Contains(q.ToLower()));
             var totalCount = query.Count();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
             var paginatedData = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
@@ -60,17 +60,17 @@ namespace test_select2.Controllers
             {
                 items = paginatedData,
                 total_count = totalCount
-            }); 
+            });
         }
 
 
-        public JsonResult GetData2(string q="", int page = 1)
+        public JsonResult GetData2(string q = "", int page = 1)
         {
             int pageSize = 10; // Number of items per page
             var data = new List<Select2Item>
                {
-                        
-                            new Select2Item { id = 13, text = "kin2"},
+
+                            new Select2Item { id = 13, text = "kin2fewewewewewewfewfewfewfwef"},
                             new Select2Item { id = 14, text = "kin3" },
                             new Select2Item { id = 15, text = "kin4" },
                             new Select2Item { id = 16, text = "kin5" },
@@ -90,13 +90,13 @@ namespace test_select2.Controllers
 
 
                };
-            
-            var query = q == ""? data : data.Where(data => data.text.ToLower().Contains(q.ToLower()));
+
+            var query = q == "" ? data : data.Where(data => data.text.ToLower().Contains(q.ToLower()));
             var totalCount = query.Count();
             var totalPages = (int)Math.Ceiling((double)totalCount / pageSize);
             var paginatedData = query.Skip((page - 1) * pageSize).Take(pageSize).ToList();
             List<Select2Item> data2 = new List<Select2Item>();
-            if (page ==1) data2.Add(new Select2Item { id = -1, text = "-1", disabled = true });
+            if (page == 1) data2.Add(new Select2Item { id = -1, text = "-1", disabled = true });
             data2.AddRange(paginatedData);
 
 
@@ -105,9 +105,46 @@ namespace test_select2.Controllers
             {
                 items = data2,
                 total_count = totalCount,
-                header_code="Code",
+                header_code = "Code",
                 header_name = "Name Kien",
             });
+        }
+
+        [HttpPost]
+
+        public JsonResult GetInfor()
+        {
+            return Json(new
+            {
+                id = 1,
+                name = "kin",
+                age = 20,
+                address = "Hà Nội",
+                phone = "0123456789",
+            });
+
+        }
+
+        public JsonResult GetDataTable()
+        {
+          List<User> users =new List<User>();
+            for (int i = 0; i < 50; i++)
+            {
+                users.Add(new User
+                {
+                    Id = i,
+                    Name = "User " + i,
+                    Email = "user" + i + "@example.com",
+                    Phone = "123456789" + i,
+                    Address = "Address " + i,
+                    City = "City " + i,
+                    State = "State " + i,
+                    ZipCode = "ZipCode " + i,
+                    CreatedAt = DateTime.Now.AddDays(-i),
+                    UpdatedAt = DateTime.Now.AddDays(-i)
+                });
+            }
+            return Json(new { data = users });  
         }
     }
 }
